@@ -97,8 +97,8 @@ def AddExclusion(movie):
     exclusions.append(new_exclusion)
     
     # Save the changes to the file (script location on the server share)
-    #with open("/mnt/user/Scripts/MovieExclusions.py", "w") as file:
-    with open("MovieExclusions.py", "w") as file: ##change to this if testing locally
+    with open(f"{config.scriptLocation}/MovieExclusions.py", "w") as file:
+    #with open("MovieExclusions.py", "w") as file: ##change to this if testing locally
         file.write("Exclusions = ")
         json.dump(exclusions, file, indent=4)
         print(f"Movie '{movie.title}' added to exclusions list successfully.")

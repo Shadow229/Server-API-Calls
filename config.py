@@ -15,3 +15,6 @@ overseerr_api_key = 'YOUR OVERSEERR API KEY='  #change to your Overseerr API key
 #The Movie Database
 tmdb_url = 'https://api.themoviedb.org/3/'
 tmdb_api_key = 'YOUR TMDB API KEY'  #change to your TMDB API key
+
+#File location
+scriptLocation = '/mnt/user/Scripts/' #set to the share the scripts are saved on. Set to '' if testing from VSCode
