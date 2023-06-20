@@ -3,6 +3,8 @@
 
 This script assumes a working stack of Plex, Overseerr and Radarr due to API calls to each endpoint.
 
+You will also need to register an account on themoviedb.org, and request an API key (all free)
+
 Written and tested only for an UNRAID OS. Some alteration to the usage notes below may be required for other operating systems.
 
 
