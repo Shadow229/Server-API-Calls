@@ -1,7 +1,10 @@
 # Movie-Management-APIs
  Automatically Add and Remove movies from Plex
 
-NOTE: Written and tested only for an UNRAID OS. Some alteration to the usage notes below may be required for other operating systems.
+This script assumes a working stack of Plex, Overseerr and Radarr due to API calls to each endpoint.
+
+Written and tested only for an UNRAID OS. Some alteration to the usage notes below may be required for other operating systems.
+
 
 The 2 main scripts are AutoDeleteMovies.py, and AutoGetMovies.py. Both work together to generate a 'churn' of movies on and off the server.
 
