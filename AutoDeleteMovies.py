@@ -20,7 +20,7 @@ UnWatchedLimit = 30 # Days a movie will stay on the server if downloaded but nev
 plex_movies = Plex.GetPlexMovies(config.plex_api_url + config.plex_api_request + config.plex_token)
 
 #filter to 1 movie for debugging
-#moviename = "Deadpool"
+#moviename = "Toy Story"
 #plex_movies = [item for item in plex_movies if moviename in item.title]
 
 #debug counts
@@ -31,8 +31,7 @@ print(f"Total Movies in Database: {MoviesInDB}")
 ##  Derive Idle movies from Plex list
 ############################################################
 
-#delete_list = MovieFunctions.GetIdleMovies(IdleLimit, UnWatchedLimit, plex_movies)
-delete_list = plex_movies
+delete_list = MovieFunctions.GetIdleMovies(IdleLimit, UnWatchedLimit, plex_movies)
 
 #debug counts
 MoviesToDelete = len(delete_list)
