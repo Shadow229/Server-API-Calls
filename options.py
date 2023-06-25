@@ -1,5 +1,5 @@
-from constraints import NetflixLocation
-from constraints import Genres
+from constants import NetflixLocation
+from constants import Genres
 
 ######################################################
 # AUTO DELETE PARAMETERS

@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 import requests
 
-import constraints
+import constants
 import config
 import options
 
@@ -85,7 +85,7 @@ class Plex():
             for directory in root.iter("Directory"):
                 section_id = directory.attrib.get("key")
                 section_name = directory.attrib.get("title")
-                if section_name == constraints.PLEXLIBRARY:
+                if section_name == constants.PLEXLIBRARY:
                     return section_id
             print("Plex Library Name Not Found - No Section ID available")
             sys.exit()
