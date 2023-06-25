@@ -6,7 +6,7 @@ import requests
 import config
 from Radarr import Radarr
 import MovieExclusions
-import Overseerr
+from Overseerr import Overseerr
 
 
 #Movie details split out to make referencing easier
@@ -126,5 +126,5 @@ class MovieManager():
                 
 
         #Sync the media availability from overseerr so it can be redownloaded if wanted
-        Overseerr.SyncMediaAvailabilty(config.overseerr_url, config.overseerr_api_key) 
+        Overseerr().SyncMediaAvailabilty() 
         
