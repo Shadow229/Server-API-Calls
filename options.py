@@ -27,7 +27,7 @@ auto_get_movies = True
 #TMDB search settings
 rating_threshold = 7
 minimum_reviews = 10000
-exclude_genres = [Genres.WESTERN, Genres.WAR, Genres.THRILLER]
+exclude_genres = []     # example addition: [Genres.WESTERN, Genres.WAR, Genres.THRILLER]
 #popularity_threshold = 100.00 - this isn't set up from an API side yet. ticket here: https://trello.com/c/xuS4lvQ0/7-add-popularity-filter-to-discover
 
 #how many movies to get each run
