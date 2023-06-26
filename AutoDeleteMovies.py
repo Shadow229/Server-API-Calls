@@ -1,10 +1,11 @@
-import config
-#import MovieFunctions
+import options
 from MovieManager import MovieManager
 from Plex import Plex
 
 
 def update():
+    
+    if not options.auto_delete_movies: return
     
     #instances
     plex = Plex()
