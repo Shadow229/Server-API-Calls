@@ -170,11 +170,11 @@ class TMDB():
     
     def get_genre_id_list(self):
         
-        genre_ids = []        
-        
+        genre_ids = []      
+
         for genre in options.exclude_genres:
             genre_ids.append(str(genre.value))
             
-            genre_ids_str = ",".join(genre_ids)
+        genre_ids_str = ",".join(genre_ids)
         
         return genre_ids_str
