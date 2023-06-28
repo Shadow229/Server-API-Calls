@@ -7,6 +7,7 @@ class Overseerr():
     def __init__(self):
         self.url = config.overseerr_url
         self.api_key = config.overseerr_api_key
+        self.root_folder = config.overseerr_root_folder
         #self.collectionId = Plex.Plex().GetCollection()
 
     def DownloadMovies(self, movies_to_download):
@@ -23,7 +24,7 @@ class Overseerr():
                 'tmdbid': movie.id,
                 'mediaId': movie.id,
                 'mediaType': 'movie',
-                'rootFolder':'/media'
+                'rootFolder': self.root_folder
             }
 
             # Make the request to Overseerr
