@@ -21,12 +21,12 @@ class Movie:
 
 #Class for all the exclusion details we need
 class MovieExclusion:
-    def __init__(self, title, year):
+    def __init__(self, title, id):
         self.title = title
-        self.year = year
+        self.id = id
 
     def __str__(self):
-        return f"Movie: {self.title}\nYear:{self.year}"
+        return f"Movie: {self.title}\nID:{self.id}"
     
 
 #General Functions for movie management
@@ -34,8 +34,15 @@ class MovieManager():
     
     exclusions = MovieExclusions.Exclusions
     
-    def GetExclusions():
+    def GetExclusions_Dict():
+                
         return MovieManager.exclusions
+    
+    
+    def GetExclusions_List():
+        
+        return MovieManager.generate_movie_exlusions(MovieManager.exclusions)
+                
     
     #helper functions
 
@@ -45,6 +52,19 @@ class MovieManager():
             #"year": exclusion.year,
             "id": exclusion.id #tmdb id
         }
+        
+        
+    #generate a list from the dict file
+    def generate_movie_exlusions(exclusions_dict):
+        exclusions_list = []
+        
+        for exclusion_data in exclusions_dict:
+            title = exclusion_data["title"]
+            id = exclusion_data["id"]
+            exclusion = MovieExclusion(title, id)
+            exclusions_list.append(exclusion)
+            
+        return exclusions_list
 
         
         

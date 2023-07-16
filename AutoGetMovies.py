@@ -47,8 +47,8 @@ def update():
     missing_netflix = MovieManager.compare_movies(netflix.movies, plex.movies)
 
     #Compare and remove Exclusions
-    wanted_tmdb = MovieManager.compare_movies(missing_tmdb, MovieManager.GetExclusions())
-    wanted_netflix = MovieManager.compare_movies(missing_netflix, MovieManager.GetExclusions())
+    wanted_tmdb = MovieManager.compare_movies(missing_tmdb, MovieManager.GetExclusions_List())
+    wanted_netflix = MovieManager.compare_movies(missing_netflix, MovieManager.GetExclusions_List())
 
     ############################################################
     ##  Download titles with Overseer
