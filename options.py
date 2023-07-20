@@ -6,13 +6,20 @@ from constants import Genres
 ######################################################
 
 #Do you want to auto delete movies?
-    #NOTE: Auto delete looks at ALL movies on your plex library - NOT just the ones the script downloads.
 auto_delete_movies = True
+
+#determins wether the auto delete looks at the entire library on Plex. Set to False, it will only check the movies the script has downloaded itself. (see list AutoGetMovieList.py)
+auto_delete_FullLibrary = False
 
 #--------------------------------------#
 
+#Removal Limits:
 idleLimit = 730 # Days before movie will be deleted
 unwatchedLimit = 30 # Days a movie will stay on the server if downloaded but never watched
+
+#Adds any removed titles to an exclusions list to stop the auto get script picking them again in the future
+UniqueFetch = True 
+
 
 
 ######################################################
@@ -32,6 +39,7 @@ exclude_genres = []     # example addition: [Genres.WESTERN, Genres.WAR, Genres.
 
 #how many movies to get each run
 download_count = 5
+
 
 
 ######################################################

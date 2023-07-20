@@ -1,7 +1,7 @@
-import options
+#import MovieFunctions
 from MovieManager import MovieManager
 from Plex import Plex
-
+import options
 
 def update():
     
@@ -26,7 +26,7 @@ def update():
     ############################################################
 
     delete_list = plex.GetIdleMovies()
-
+    
     #debug count
     print(f"Total Movies to Delete: {len(delete_list)}")
 
@@ -35,4 +35,4 @@ def update():
     ##  Delete the Movies
     ############################################################
 
-    MovieManager.DeleteMovies(delete_list)
+    MovieManager.DeleteMovies(delete_list, options.UniqueFetch)

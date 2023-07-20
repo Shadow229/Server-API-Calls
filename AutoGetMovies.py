@@ -9,6 +9,9 @@ from TMDB import TMDB
 
 
 def update():
+    
+    #early out
+    if not options.get_netflix_top_10 and not options.auto_get_movies: return
 
     #create instances
     plex = Plex()
@@ -43,22 +46,26 @@ def update():
     ############################################################
 
     #Compare and remove existing Plex titles
-    missing_tmdb = MovieManager.compare_movies(tmdb.movies, plex.movies)
-    missing_netflix = MovieManager.compare_movies(netflix.movies, plex.movies)
+    missing_tmdb = MovieManager.compare_movies_uneq(tmdb.movies, plex.movies)
+    missing_netflix = MovieManager.compare_movies_uneq(netflix.movies, plex.movies)    
 
     #Compare and remove Exclusions
-    wanted_tmdb = MovieManager.compare_movies(missing_tmdb, MovieManager.GetExclusions_List())
-    wanted_netflix = MovieManager.compare_movies(missing_netflix, MovieManager.GetExclusions_List())
+    wanted_tmdb = MovieManager.compare_movies_uneq(missing_tmdb, MovieManager.GetExclusions_List())
+    wanted_netflix = MovieManager.compare_movies_uneq(missing_netflix, MovieManager.GetExclusions_List())
+    
+    #Compare and remove existing requests that may be still downloading form prior runs
+    request_tmdb = MovieManager.compare_movies_uneq(wanted_tmdb, MovieManager.GetMovies_List())
+    request_netflix = MovieManager.compare_movies_uneq(wanted_netflix, MovieManager.GetMovies_List())
 
     ############################################################
     ##  Download titles with Overseer
     ############################################################
 
     #get random sample of movies from available TMDB list
-    wanted_tmdb = random.sample(wanted_tmdb, min(len(wanted_tmdb), options.download_count))
+    request_tmdb = random.sample(request_tmdb, min(len(request_tmdb), options.download_count))
 
     #Combine all
-    movies_to_download = wanted_tmdb + wanted_netflix
+    movies_to_download = request_tmdb + request_netflix
 
     #print all the movies to the terminal (debugging)
     for movie in movies_to_download:
@@ -66,4 +73,7 @@ def update():
 
     # Download movies using the Overseerr API
     if movies_to_download:
-        overseerr.DownloadMovies(movies_to_download)
+        successfulRequests = overseerr.DownloadMovies(movies_to_download)
+        
+        for movie in successfulRequests:
+            MovieManager.AddDownloaded(movie)

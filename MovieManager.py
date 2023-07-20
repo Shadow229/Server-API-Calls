@@ -6,6 +6,7 @@ import requests
 import config
 from Radarr import Radarr
 import MovieExclusions
+import AutoGetMovieList
 from Overseerr import Overseerr
 
 
@@ -19,8 +20,8 @@ class Movie:
         return f"Movie: {self.title}"
 
 
-#Class for all the exclusion details we need
-class MovieExclusion:
+#Short Class for all movie list details we need
+class MovieListTag:
     def __init__(self, title, id):
         self.title = title
         self.id = id
@@ -33,43 +34,51 @@ class MovieExclusion:
 class MovieManager():
     
     exclusions = MovieExclusions.Exclusions
+    movieList = AutoGetMovieList.MovieList
     
-    def GetExclusions_Dict():
-                
+    def GetExclusions_Dict():              
         return MovieManager.exclusions
     
     
-    def GetExclusions_List():
-        
-        return MovieManager.generate_movie_exlusions(MovieManager.exclusions)
+    def GetExclusions_List():        
+        return MovieManager.generate_movie_list_from_dict(MovieManager.exclusions)
+
+    def GetMovies_List():        
+        return MovieManager.generate_movie_list_from_dict(MovieManager.movieList)
                 
     
     #helper functions
 
-    def create_movie_exclusion(exclusion):
+    def create_movie_record_entry(movie):
         return {
-            "title": exclusion.title,
+            "title": movie.title,
             #"year": exclusion.year,
-            "id": exclusion.id #tmdb id
+            "id": movie.id #tmdb id
         }
         
         
+ 
     #generate a list from the dict file
-    def generate_movie_exlusions(exclusions_dict):
+    def generate_movie_list_from_dict(movie_dict):
         exclusions_list = []
         
-        for exclusion_data in exclusions_dict:
+        for exclusion_data in movie_dict:
             title = exclusion_data["title"]
             id = exclusion_data["id"]
-            exclusion = MovieExclusion(title, id)
+            exclusion = MovieListTag(title, id)
             exclusions_list.append(exclusion)
             
         return exclusions_list
 
-        
-        
-    def compare_movies(list1, list2):
+
+    def compare_movies_eq(list1, list2):
         #compare 2 movie lists based on TMDB ID
+        #Return any of list1 contained in list2
+        return [movie for movie in list1 if any(MovieManager.compare_movie_ids(movie.id, movieB.id) for movieB in list2)]
+            
+    def compare_movies_uneq(list1, list2):
+        #compare 2 movie lists based on TMDB ID
+        #Return all of list1 NOT IN list2
         return [movie for movie in list1 if not any(MovieManager.compare_movie_ids(movie.id, movieB.id) for movieB in list2)]
 
     def compare_movie_ids(ID1, ID2):
@@ -96,26 +105,89 @@ class MovieManager():
 
 
 
-    def AddExclusion(movie):  
+    # def AddExclusion(movie):  
+    #     #Add the deleted movie to the exclusions so the auto downloader doesnt pick it up again
+        
+    #     exclusions = MovieExclusions.Exclusions
+        
+    #     #Create a new exclusion
+    #     #new_exclusion = MovieClasses.MovieExclusion(movie.title, movie.year)
+    #     new_exclusion = MovieManager.create_movie_record_entry(movie)
+        
+    #     #add to exclusions
+    #     exclusions.append(new_exclusion)
+        
+    #     # Save the changes to the file (script location on the server share)
+    #     with open(f"{config.script_dir}MovieExclusions.py", "w") as file:
+    #     #with open("MovieExclusions.py", "w") as file: ##change to this if testing locally
+    #         file.write("Exclusions = ")
+    #         json.dump(exclusions, file, indent=4)
+    #         print(f"Movie '{movie.title}' added to exclusions list successfully.")
+                        
+                  
+    def AddExclusion(movie):
         #Add the deleted movie to the exclusions so the auto downloader doesnt pick it up again
         
-        exclusions = MovieExclusions.Exclusions
+        fileTitle = 'MovieExclusions'
+        jsonTitle = 'Exclusions'
+        exclusions = MovieExclusions.Exclusions  
+
+        #add movie to exclusions list
+        MovieManager.AddMovieToList(movie, exclusions, fileTitle, jsonTitle)
+              
+    def AddDownloaded(movie):
+        #Add the movie to the movie list to track what is downloaded by the script
         
-        #Create a new exclusion
-        #new_exclusion = MovieClasses.MovieExclusion(movie.title, movie.year)
-        new_exclusion = MovieManager.create_movie_exclusion(movie)
+        fileTitle = 'AutoGetMovieList'
+        jsonTitle = 'MovieList'
+        movieList = AutoGetMovieList.MovieList  
         
-        #add to exclusions
-        exclusions.append(new_exclusion)
+        #add movie to exclusions list
+        MovieManager.AddMovieToList(movie, movieList, fileTitle, jsonTitle)      
         
-        # Save the changes to the file (script location on the server share)
-        with open(f"{config.script_dir}MovieExclusions.py", "w") as file:
-        #with open("MovieExclusions.py", "w") as file: ##change to this if testing locally
-            file.write("Exclusions = ")
-            json.dump(exclusions, file, indent=4)
-            print(f"Movie '{movie.title}' added to exclusions list successfully.")
-                        
+        
+    def RemoveDownloaded(movie):
+        #Add the movie to the movie list to track what is downloaded by the script
+        
+        fileTitle = 'AutoGetMovieList'
+        jsonTitle = 'MovieList'
+        movieList = AutoGetMovieList.MovieList  
+
+        #add movie to movie list
+        MovieManager.RemoveMovieFromList(movie, movieList, fileTitle, jsonTitle)
+              
+                                          
+    def AddMovieToList(movie, movieList, fileTitle, jsonTitle):  
+        #Add the movie and tmdb ID to a list
+         
+        #Create a new movie entry
+        new_movie = MovieManager.create_movie_record_entry(movie)
+        
+        #add to list
+        movieList.append(new_movie)
+        
+        MovieManager.writeMovielistToFile(movie, movieList, fileTitle, jsonTitle)
             
+            
+    def RemoveMovieFromList(movie, movieList, fileTitle, jsonTitle):
+        #remove from movielist
+        #ActualListofMovies = MovieManager.generate_movie_list_from_dict(movieList)
+                
+        newList = [movie2 for movie2 in movieList if movie2["id"] != movie.id]
+   
+        MovieManager.writeMovielistToFile(movie, newList, fileTitle, jsonTitle)
+            
+
+
+    def writeMovielistToFile(movie, movieList, fileTitle, jsonTitle):
+        # Save the changes to the file (script location on the server share)
+        #with open(f"{config.script_dir}{fileTitle}.py", "w") as file:
+        with open(f"{fileTitle}.py", "w") as file: ##change to this if testing locally
+            file.write(f"{jsonTitle} = ")
+            json.dump(movieList, file, indent=4)
+            print(f"Movie '{movie.title}' added to {fileTitle} list successfully.")
+
+
 
     def DeleteMovies(delete_list, AddToExclusion: bool = True):
         #Deletes the movies from plex, and also removes the reference from Radarr so it doesn't try and grab the title again
@@ -143,6 +215,7 @@ class MovieManager():
                         
             if AddToExclusion:
                 MovieManager.AddExclusion(movie)
+            MovieManager.RemoveDownloaded(movie)
                 
 
         #Sync the media availability from overseerr so it can be redownloaded if wanted

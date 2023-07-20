@@ -14,6 +14,8 @@ class Overseerr():
         
         #generate a header with our API key
         headers = {"X-Api-Key": self.api_key}
+        
+        successfulRequests = []
 
         #loop throug each movie to download and send the request to overseer
         for movie in movies_to_download:
@@ -32,9 +34,11 @@ class Overseerr():
                 response = requests.post(f'{self.url}/request', headers=headers, json=payload)
                 response.raise_for_status()
                 print(f'Movie "{movie.title}" requested successfully!')
+                successfulRequests.append(movie)
             except requests.exceptions.RequestException as e:
                 print(f'Error requesting movie "{movie.title}": {e}')
                 
+        return successfulRequests
                 
     def DeleteMovie(self, movie_id):
         

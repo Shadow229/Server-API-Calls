@@ -129,8 +129,17 @@ class Plex():
         
         print("Processing idle movies...")
         
-        for movie in self.movies:
-                
+        
+        movielist = []
+        #get correct idle list
+        if options.auto_delete_FullLibrary:
+            movielist = self.movies
+        else:
+            movielist = MovieManager.compare_movies_eq(self.movies, MovieManager.GetMovies_List())       
+        
+        
+        for movie in movielist:
+                           
             #debugging flags for terminal printouts      
             MarkToDelete = 'False'
 
@@ -172,3 +181,38 @@ class Plex():
     def RemoveExisting(self, v_movieList):
         [movie for movie in v_movieList if not any(MovieManager.compare_movies(movie, movieB.details) for movieB in self.movieList)]
         
+        
+    # def GetCollection(self):
+                      
+    #     # Set the headers with the API token
+    #     headers = {
+    #         'X-Plex-Token': self.token,
+    #     }
+
+    #     # Make the API call to get the existing collections
+    #     response = requests.get(f'{self.url}/library/collections', headers=headers)
+
+    #     # Check the response status
+    #     if response.status_code == 200:
+    #         root = ET.fromstring(response.content)
+    #         collections = root.findall('Directory')
+    #         for collection in collections:
+    #             if collection.get('title') == constants.COLLECTION:
+    #                 collection_id = collection.get('ratingKey')
+    #                 print('Collection already exists. ID:', collection_id)
+    #                 break
+    #         else:
+    #             # Collection does not exist, proceed with creating it
+    #             payload = {
+    #                 'type': 'collection',
+    #                 'title': constants.COLLECTION,
+    #             }
+    #             create_response = requests.post(f'{self.url}/library/collections', headers=headers, data=payload)
+    #             if create_response.status_code == 201:
+    #                 create_root = ET.fromstring(create_response.content)
+    #                 collection_id = create_root.get('ratingKey')
+    #                 print('New Collection created. ID:', collection_id)
+    #             else:
+    #                 print('Failed to create the new collection. Error:', create_response.text)
+    #     else:
+    #         print('Failed to retrieve collections. Error:', response.text)

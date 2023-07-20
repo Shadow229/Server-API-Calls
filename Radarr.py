@@ -69,7 +69,7 @@ class Radarr():
             else:
                 print(f'No search results found for movie "{movie.title}".')
         else:
-            print('Failed to perform the movie search in Radarr:', response.status_code)
+            print('Failed to perform the movie search in Radarr:', tmdb_response.status_code)
             
             
 

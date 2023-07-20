@@ -37,10 +37,10 @@ class TMDB():
         "api_key": self.api_key,
         "certification_country": "US",
         "language": "en-US",
-        "without_genres": f"{self.excluded_genres}",  # Exclude genres with IDs 28, 12, and 16
-        "vote_average.gte": f"{options.rating_threshold}",  # Movies with a rating of 7 or above
+        "without_genres": f"{self.excluded_genres}",  
+        "vote_average.gte": f"{options.rating_threshold}",
         "vote_count.gte":f"{options.minimum_reviews}",
-        "include_adult": False,  # Exclude adult movies
+        "include_adult": False,
         }
                
         tmdb_response = requests.get(f"{self.url}/discover/movie", params=params)     
@@ -66,9 +66,7 @@ class TMDB():
             
             for movie in tmdb_page:
                 self.add_movie(TMDBMovie(movie))
-            
-            #movies = ConvertToMovieType(tmdb_movies)
-            
+                        
 
 
     def GetInfoFromTitle(self, movieName, year = 0):
@@ -170,8 +168,8 @@ class TMDB():
     
     def get_genre_id_list(self):
         
-        genre_ids = []      
-
+        genre_ids = []     
+        
         for genre in options.exclude_genres:
             genre_ids.append(str(genre.value))
             
