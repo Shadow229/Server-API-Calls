@@ -104,26 +104,6 @@ class MovieManager():
         return matching
 
 
-
-    # def AddExclusion(movie):  
-    #     #Add the deleted movie to the exclusions so the auto downloader doesnt pick it up again
-        
-    #     exclusions = MovieExclusions.Exclusions
-        
-    #     #Create a new exclusion
-    #     #new_exclusion = MovieClasses.MovieExclusion(movie.title, movie.year)
-    #     new_exclusion = MovieManager.create_movie_record_entry(movie)
-        
-    #     #add to exclusions
-    #     exclusions.append(new_exclusion)
-        
-    #     # Save the changes to the file (script location on the server share)
-    #     with open(f"{config.script_dir}MovieExclusions.py", "w") as file:
-    #     #with open("MovieExclusions.py", "w") as file: ##change to this if testing locally
-    #         file.write("Exclusions = ")
-    #         json.dump(exclusions, file, indent=4)
-    #         print(f"Movie '{movie.title}' added to exclusions list successfully.")
-                        
                   
     def AddExclusion(movie):
         #Add the deleted movie to the exclusions so the auto downloader doesnt pick it up again
@@ -181,8 +161,8 @@ class MovieManager():
 
     def writeMovielistToFile(movie, movieList, fileTitle, jsonTitle):
         # Save the changes to the file (script location on the server share)
-        #with open(f"{config.script_dir}{fileTitle}.py", "w") as file:
-        with open(f"{fileTitle}.py", "w") as file: ##change to this if testing locally
+        with open(f"{config.script_dir}{fileTitle}.py", "w") as file:
+        #with open(f"{fileTitle}.py", "w") as file: ##change to this if testing locally
             file.write(f"{jsonTitle} = ")
             json.dump(movieList, file, indent=4)
             print(f"Movie '{movie.title}' added to {fileTitle} list successfully.")
