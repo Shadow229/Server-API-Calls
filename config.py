@@ -11,7 +11,7 @@ radarr_api_key = '<YOUR RADARR API KEY>' #change to your Radarr API key
 #overseerr config
 overseerr_url = 'http://192.168.111.101:5055/api/v1'  #change to your Overseerr URL
 overseerr_api_key = '<YOUR OVERSEERR API KEY>'  #change to your Overseerr API key
-overseerr_root_folder = '/media' #change to your radarr root folder
+overseerr_root_folder = '/media' #change to your overseer root folder
 
 #The Movie Database
 tmdb_url = 'https://api.themoviedb.org/3/'
